@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body>
+    <header><%- include('../partials/header'); %></header>
+    <main class="page">
+      <div class="page__title-area">
+        <h1>User ID: <%= user.id %></h1>
+      </div>
+      <form class="form" hx-put="/users/<%= user.id %>">
+        <div class="form__item">
+          <label for="username">Username</label>
+          <input name="username" value="<%= user.username %>" maxlength="20" />
+        </div>
+        <div class="form__item">
+          <label for="email">Email</label>
+          <input name="email" type="email" value="<%= user.email %>" maxlength="255" />
+        </div>
+        <div class="form__actions">
+          <button
+            class="form__btn btn-error elevated"
+            type="submit"
+            hx-delete="/users/<%= user.id %>"
+            hx-confirm="Are you sure you wish to delete this user?"
+          >
+            Delete
+          </button>
+          <button class="form__btn btn-primary elevated" type="submit">
+            Save
+          </button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

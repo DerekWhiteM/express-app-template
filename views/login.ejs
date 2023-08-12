@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html lang="en" class="h-full">
+<head>
+  <%- include('./partials/head'); %>
+</head>
+<body class="h-full">
+  <form class="login" hx-post="/login">
+    <h1 class="login__heading">Sign in to your account</h1>
+    <div>
+      <label for="username" class="login__label">Username</label>
+      <input name="username" class="login__input" maxlength="20" />
+    </div>
+    <div>
+      <label for="password" class="login__label" maxlength="50">Password</label>
+      <input name="password" type="password" class="login__input" />
+    </div>
+    <button class="login__btn btn-primary elevated" type="submit">Submit</button>
+  </form>
+</body>
+</html>

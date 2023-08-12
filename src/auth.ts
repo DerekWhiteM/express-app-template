@@ -10,8 +10,13 @@ export function check_authenticated(
   next: Function
 ) {
   if (req.isAuthenticated()) return next();
-  if (req.header("x-api-key") === process.env.API_KEY) return next();
-  return res.status(403).json({ message: "Not Authenticated" });
+  const header_api_key = req.header("x-api-key");
+  if (header_api_key) {
+    return header_api_key === process.env.API_KEY
+      ? next()
+      : res.status(403).json({ message: "Not Authenticated" });
+  }
+  return res.redirect("/login");
 }
 
 export function check_not_authenticated(

@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body>
+    <header><%- include('../partials/header'); %></header>
+    <main class="page">
+      <div class="page__title-area">
+        <h1>Users</h1>
+        <a href="/users/create">
+          <button class="btn-primary page__title-btn">
+            Add a user
+          </button>
+        </a>
+      </div>
+      <table class="table elevated">
+        <thead class="table__header">
+          <th>User</th>
+          <th>Email</th>
+          <th>Created at (UTC)</th>
+          <th>Updated at (UTC)</th>
+        </thead>
+        <tbody>
+          <% users.forEach(function(user){ %>
+          <tr>
+            <td><a href="/users/<%=user.id%>"><%= user.username %></a></td>
+            <td><%= user.email %></td>
+            <td><%= new Date(user.created_at).toLocaleString() %></td>
+            <td><%= new Date(user.updated_at).toLocaleString() %></td>
+          </tr>
+          <% }); %>
+        </tbody>
+      </table>
+    </main>
+  </body>
+</html>
