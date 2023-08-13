@@ -12,27 +12,28 @@ const create_schema = z.object({
 });
 
 async function validate_create(req: any, res: any, next: Function) {
-  const result = create_schema.safeParse(req.body);
-  if (result.success) {
-    const fields: any = {};
-    if (await User.find_by_username(req.body.username))
-      fields["username"] = "Username is taken";
-    if (await User.find_by_email(req.body.email))
-      fields["email"] = "Email is already in use";
-    if (Object.keys(fields).length === 0) return next();
-    return res.render("partials/user_create.ejs", {
-      values: req.body,
-      error: { fields },
-    });
+  const schema_validation = create_schema.safeParse(req.body);
+  const fields: any = {};
+  Object.keys(req.body).forEach((key) => {
+    fields[key] = {
+      value: req.body[key],
+      error: null,
+    };
+  });
+  if (schema_validation.success) {
+    const username_exists = await User.find_by_username(req.body.username);
+    const email_exists = await User.find_by_email(req.body.email);
+    if (username_exists || email_exists) {
+      if (username_exists) fields.username.error = "Username is taken";
+      if (email_exists) fields.email.error = "Email is already in use";
+      return res.render("partials/user_create.ejs", { fields: fields });
+    }
+    return next();
   } else {
-    const fields: any = {};
-    result.error.issues.forEach((issue: ZodIssue) => {
-      fields[issue.path[0]] = issue.message;
-    });
-    return res.render("partials/user_create.ejs", {
-      values: req.body,
-      error: { fields },
-    });
+    schema_validation.error.issues.forEach(
+      (issue: ZodIssue) => (fields[issue.path[0]].error = issue.message)
+    );
+    return res.render("partials/user_create.ejs", { fields: fields });
   }
 }
 

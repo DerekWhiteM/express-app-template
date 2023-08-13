@@ -164,7 +164,7 @@ input:focus-within {
 /* Form */
 
 .form {
-  width: fit-content;
+  max-width: 18rem;
   display: flex;
   flex-direction: column;
   gap: 1.328rem;
@@ -172,10 +172,10 @@ input:focus-within {
 
 .form__item {
   display: flex;
-  justify-content: space-between;
-  gap: 1.236rem;
-  align-items: center;
+  gap: .5rem;
+  align-items: left;
   width: 100%;
+  flex-direction: column;
 }
 
 .form__btn {
@@ -184,15 +184,17 @@ input:focus-within {
 
 .form__actions {
   display: flex;
-  justify-content: right;
   gap: .618rem;
+  justify-content: right;
+}
+
+.form__label {
+  font-size: .85rem;
 }
 
 .form__error {
-  position: absolute;
-  left: 11.236rem;
-  bottom: .45rem;
-  white-space: nowrap;
+  color: var(--error);
+  font-size: .85rem;
 }
 
 /* Login */
@@ -280,6 +282,10 @@ input:focus-within {
   box-shadow: 0 1px 2px 0 rgba(0,0,0,.1),0 2px 4px 0 rgba(0,0,0,.1);
 }
 
+.error {
+  border: 1px solid var(--error);
+}
+
 .h-full {
   height: 100%;
 }
@@ -293,7 +299,7 @@ input:focus-within {
 }
 
 .page {
-  padding: 1.236rem;
+  padding: 2rem 1.236rem 2rem 1.236rem;
   max-width: 50rem;
   margin: auto;
 }
@@ -302,7 +308,7 @@ input:focus-within {
   display: flex;
   width: 100%;
   justify-content: space-between;
-  margin-bottom: 1.236rem;
+  margin-bottom: 2rem;
   align-items: center;
 }
 
