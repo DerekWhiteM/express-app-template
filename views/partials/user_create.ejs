@@ -5,7 +5,7 @@
   const password    = has_fields ? fields.password : null;
 %>
 
-<form class="form" hx-post="/users">
+<form class="form" hx-post="/users" hx-swap="outerHTML">
   <div class="form__item">
     <label class="form__label" for="username">Username</label>
     <input

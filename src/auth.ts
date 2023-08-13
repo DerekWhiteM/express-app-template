@@ -37,13 +37,31 @@ export function init_passport() {
   ) => {
     const hashed_password = await User.find_password_by_username(username);
     if (hashed_password == null) {
-      return done(null, false, { message: "No user with that username" });
+      return done(null, false, { 
+        username: {
+          value: username,
+          error: "Invalid username" 
+        },
+        password: {
+          value: password,
+          error: null
+        }
+      });
     }
     try {
       const compare = await bcrypt.compare(password, hashed_password);
       return compare
         ? done(null, await User.find_by_username(username))
-        : done(null, false, { message: "Password incorrect" });
+        : done(null, false, {
+            username: {
+              value: username,
+              error: null,
+            },
+            password: {
+              value: password, 
+              error: "Invalid password"
+            }
+          });
     } catch (error) {
       return done(error);
     }

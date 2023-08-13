@@ -1,0 +1,30 @@
+<%
+  const has_fields  = typeof fields != 'undefined';
+  const username    = has_fields ? fields.username : null;
+  const password    = has_fields ? fields.password : null;
+%>
+
+<form class="login" hx-post="/login" hx-swap="outerHTML">
+  <h1 class="login__heading">Sign in to your account</h1>
+  <div>
+    <label for="username" class="login__label">Username</label>
+    <input 
+      name="username" 
+      class="login__input<%=username?.error?' error':null%>" 
+      maxlength="20"
+      required
+      value="<%=username?.value%>" 
+    />
+  </div>
+  <div>
+    <label for="password" class="login__label" maxlength="50">Password</label>
+    <input 
+      name="password" 
+      type="password" 
+      class="login__input<%=password?.error?' error':null%>"
+      required
+      value="<%=password?.value%>" 
+    />
+  </div>
+  <button class="login__btn btn-primary elevated" type="submit">Submit</button>
+</form>

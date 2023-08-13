@@ -32,7 +32,9 @@ router.delete("/logout", check_authenticated, (req: any, res) => {
 router.post("/login", check_not_authenticated, (req, res) => {
   passport.authenticate("local", (error: any, user: User, info: any) => {
     if (error) return res.sendStatus(500);
-    if (!user) return res.status(500).json({ message: info.message });
+    if (!user) {
+      return res.render("partials/login_form.ejs", { fields: {...info} });
+    }
     req.logIn(user, (error) => {
       if (error) return res.sendStatus(500);
       res.setHeader("HX-Redirect", "/");
