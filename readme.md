@@ -1,1 +1,1 @@
-# TypeScript App Template
+# Express App Template
