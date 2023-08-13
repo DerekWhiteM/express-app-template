@@ -175,6 +175,7 @@ input:focus-within {
   justify-content: space-between;
   gap: 1.236rem;
   align-items: center;
+  width: 100%;
 }
 
 .form__btn {
@@ -185,6 +186,13 @@ input:focus-within {
   display: flex;
   justify-content: right;
   gap: .618rem;
+}
+
+.form__error {
+  position: absolute;
+  left: 11.236rem;
+  bottom: .45rem;
+  white-space: nowrap;
 }
 
 /* Login */
@@ -278,6 +286,10 @@ input:focus-within {
 
 .flex {
   display: flex;
+}
+
+.relative {
+  position: relative;
 }
 
 .page {

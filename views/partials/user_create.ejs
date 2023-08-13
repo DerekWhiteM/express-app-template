@@ -1,0 +1,54 @@
+<%
+  class Field {
+    constructor(name) {
+      this.error = get_error(name);
+      this.value = get_value(name);
+    };
+  }
+  function get_value(field) {
+    return typeof values != "undefined" && values[field]
+      ? values[field]
+      : null;
+  }
+  function get_error(field) {
+    return typeof error != "undefined" && error.fields[field]
+      ? error.fields[field]
+      : null;
+  }
+  const username = new Field("username");
+  const email = new Field("email");
+  const password = new Field("password");
+%>
+
+<form class="form" hx-post="/users">
+  <div class="form__item">
+    <label for="username">Username</label>
+    <div class="relative">
+      <input name="username" maxlength="20" required value="<%=username.value%>" />
+      <% if (username.error) { %>
+        <div class="form__error"><%=username.error%></div>
+      <% } %>
+    </div>
+  </div>
+  <div class="form__item">
+    <label for="email">Email</label>
+    <div class="relative">
+      <input name="email" type="email" maxlength="255" required value="<%=email.value%>" />
+      <% if (email.error) { %>
+        <div class="form__error"><%=email.error%></div>
+      <% } %>
+    </div>
+  </div>
+  <div class="form__item">
+    <label for="password">Password</label>
+    <div class="relative">
+      <input name="password" type="password" maxlength="50" required value="<%=password.value%>" />
+      <% if (password.error) { %>
+        <div class="form__error"><%=password.error%></div>
+      <% } %>
+    </div>
+  </div>
+  <div class="form__actions">
+    <button class="form__btn btn-primary elevated" type="submit">Create</button>
+  </div>
+</form>

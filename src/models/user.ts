@@ -65,6 +65,15 @@ export class User implements UserData {
     return row ? new User(row) : null;
   }
 
+  static async find_by_email(email: string): Promise<User | null> {
+    const row = await knex
+      .select([...this.columns])
+      .from(this.table)
+      .where("email", email)
+      .first();
+    return row ? new User(row) : null;
+  }
+
   static async find_password_by_id(id: number | string): Promise<string | null> {
     const row = await knex
       .select("hashed_password")
