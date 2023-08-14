@@ -74,7 +74,9 @@ export class User implements UserData {
     return row ? new User(row) : null;
   }
 
-  static async find_password_by_id(id: number | string): Promise<string | null> {
+  static async find_password_by_id(
+    id: number | string
+  ): Promise<string | null> {
     const row = await knex
       .select("hashed_password")
       .from(this.table)
@@ -92,6 +94,47 @@ export class User implements UserData {
       .where("username", username)
       .first();
     return row ? row.hashed_password : null;
+  }
+
+  static async get_permissions(): Promise<{ id: number; code: string }[]> {
+    const rows = await knex("permissions").returning(["id", "code"]);
+    return rows;
+  }
+
+  async get_permissions(): Promise<
+    { id: number; permission_id: number; code: string }[]
+  > {
+    const rows = await knex("user_permissions")
+      .returning(["id", "permission_id", "code"])
+      .innerJoin(
+        "permissions",
+        "user_permissions.permission_id",
+        "=",
+        "permissions.id"
+      )
+      .where({ user_id: this.id });
+    return rows;
+  }
+
+  async grant_permission(code: string) {
+    const permission = await knex("permissions")
+      .returning("id")
+      .where({ code })
+      .first();
+    return await knex("user_permissions").insert({
+      user_id: this.id,
+      permission_id: permission.id,
+    });
+  }
+
+  async revoke_permission(code: string) {
+    const permission = await knex("permissions")
+      .returning("id")
+      .where({ code })
+      .first();
+    return await knex("user_permissions")
+      .where({ user_id: this.id, permission_id: permission.id })
+      .del();
   }
 
   async update(data: UserUpdateInput) {
@@ -112,5 +155,20 @@ export class User implements UserData {
       .returning(User.columns)
       .where({ id: this.id })
       .update({ hashed_password });
+  }
+
+  async check_permission(code: string): Promise<boolean> {
+    const permission = await knex("permissions")
+      .returning(["id", "code"])
+      .where({ code })
+      .first();
+    const row = await knex("user_permissions")
+      .returning("id")
+      .where({
+        user_id: this.id,
+        permission_id: permission.id,
+      })
+      .first();
+    return row?.id ? true : false;
   }
 }

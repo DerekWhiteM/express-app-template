@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <%- include('../partials/head'); %>
+  </head>
+  <body>
+    <header><%- include('../partials/header'); %></header>
+    <main class="page">
+      <div class="page__title-area">
+        <h1>User Permissions: <%= user.username %></h1>
+      </div>
+      <form class="form" hx-put="/users/<%= user.id %>/permissions">
+        <% permissions.forEach(function (permission) { %>
+          <% is_granted = user_permissions.find(el => el.id === permission.id) %>
+          <div class="form__checkbox-item">
+            <label for="<%= permission.code %>"><%= permission.code %></label>
+            <input name="<%= permission.code %>" type="checkbox" <%= is_granted ? 'checked' : null %> />
+          </div>
+        <% }); %>
+        <div class="form__actions">
+          <button class="btn-primary elevated" type="submit">
+            Save
+          </button>
+        </div>
+      </form>
+    </main>
+  </body>
+</html>

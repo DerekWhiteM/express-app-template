@@ -9,6 +9,9 @@ module.exports = {
     connection: {
       filename: "data/data.db",
     },
+    pool: {
+      afterCreate: (conn, cb) => conn.run('PRAGMA foreign_keys = ON', cb)
+    },
     useNullAsDefault: true,
     migrations: {
       tableName: "migrations",

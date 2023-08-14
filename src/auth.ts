@@ -37,15 +37,15 @@ export function init_passport() {
   ) => {
     const hashed_password = await User.find_password_by_username(username);
     if (hashed_password == null) {
-      return done(null, false, { 
+      return done(null, false, {
         username: {
           value: username,
-          error: "Invalid username" 
+          error: "Invalid username",
         },
         password: {
           value: password,
-          error: null
-        }
+          error: null,
+        },
       });
     }
     try {

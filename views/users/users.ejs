@@ -9,25 +9,30 @@
       <div class="page__title-area">
         <h1>Users</h1>
         <a href="/users/create">
-          <button class="btn-primary page__title-btn">
+          <button class="btn-primary">
             Add a user
           </button>
         </a>
       </div>
       <table class="table elevated">
         <thead class="table__header">
-          <th>User</th>
-          <th>Email</th>
-          <th>Created at (UTC)</th>
-          <th>Updated at (UTC)</th>
+          <th>Username</th>
+          <th>Email Address</th>
+          <th></th>
         </thead>
         <tbody>
           <% users.forEach(function(user){ %>
           <tr>
-            <td><a href="/users/<%=user.id%>"><%= user.username %></a></td>
+            <td><%= user.username %></td>
             <td><%= user.email %></td>
-            <td><%= new Date(user.created_at).toLocaleString() %></td>
-            <td><%= new Date(user.updated_at).toLocaleString() %></td>
+            <td class="table__actions">
+              <a class="table__link" href="/users/<%=user.id%>/permissions">
+                <button class="btn-info elevated">Manage Permissions</button>
+              </a>
+              <a class="table__link" href="/users/<%=user.id%>" tabindex="-1">
+                <button class="btn-info elevated">Edit Profile</button>
+              </a>
+            </td>
           </tr>
           <% }); %>
         </tbody>

@@ -3,16 +3,31 @@ import { User } from "../../models";
 import bcrypt from "bcrypt";
 import { ZodIssue, z } from "zod";
 
-// Input validation
 
-const create_schema = z.object({
-  username: z.string().max(20),
-  email: z.string().email(),
-  password: z.string().max(50),
-});
+// **Permission handling**
+
+async function enforce_read(req: any, res: any, next: Function) {
+  const user = await req.user;
+  const has_permission = await user?.check_permission("read_users");
+  return has_permission ? next() : res.sendStatus(401);
+}
+
+async function enforce_write(req: any, res: any, next: Function) {
+  const user = await req.user;
+  const has_permission = await user?.check_permission("write_users");
+  return has_permission ? next() : res.sendStatus(401);
+}
+
+
+// **Input validation**
 
 async function validate_create(req: any, res: any, next: Function) {
-  const schema_validation = create_schema.safeParse(req.body);
+  const schema = z.object({
+    username: z.string().max(20),
+    email: z.string().email(),
+    password: z.string().max(50),
+  });
+  const schema_validation = schema.safeParse(req.body);
   const fields: any = {};
   Object.keys(req.body).forEach((key) => {
     fields[key] = {
@@ -37,25 +52,60 @@ async function validate_create(req: any, res: any, next: Function) {
   }
 }
 
-// Routes
+
+// **Routes**
 
 const router = express.Router();
 
-router.get("/create", async (req, res) => res.render("users/create.ejs"));
-
-router.get("/:id", async (req, res) => {
-  const user = await User.find_by_id(req.params.id);
-  return res.render("users/user.ejs", { user: user });
-});
-
-router.get("/", async (req, res) => {
+// View -- All Users
+router.get("/", enforce_read, async (req, res) => {
   const users = await User.find_all();
   return res.render("users/users.ejs", { users: users });
 });
 
-router.post("/", validate_create, async (req, res) => {
+// View -- Create User
+router.get("/create", enforce_read, async (req, res) => res.render("users/create.ejs"));
+
+// View -- Edit User
+router.get("/:id", enforce_read, async (req, res) => {
+  const user = await User.find_by_id(req.params.id);
+  return res.render("users/user.ejs", { user: user });
+});
+
+// View -- User Permissions
+router.get("/:id/permissions", enforce_read, async (req, res) => {
+  const user = await User.find_by_id(req.params.id);
+  const permissions = await User.get_permissions();
+  const user_permissions = await user?.get_permissions();
+  return res.render("users/permissions.ejs", {
+    user: user,
+    permissions: permissions,
+    user_permissions: user_permissions
+  });
+});
+
+// Action -- User Permissions -- Update
+router.put("/:id/permissions", enforce_write, async (req, res) => {
+  const user = await User.find_by_id(req.params.id);
+  const permissions = await User.get_permissions();
+  const user_permissions = (await user?.get_permissions())?.map(el => el.code);
+  const to_add: string[] = [];
+  const to_remove: string[] = [];
+  for (const permission of permissions) {
+    const is_checked = req.body[permission.code] ? true : false;
+    const is_granted = user_permissions?.includes(permission.code);
+    if (is_checked && !is_granted) to_add.push(permission.code);
+    else if (!is_checked && is_granted) to_remove.push(permission.code);
+  }
+  for (const code of to_add) await user?.grant_permission(code);
+  for (const code of to_remove) await user?.revoke_permission(code);
+  res.setHeader("HX-Redirect", "/users");
+  return res.sendStatus(200);
+});
+
+// Action -- User -- Create
+router.post("/", enforce_write, validate_create, async (req, res) => {
   try {
-    create_schema.parse(req.body);
     const user_data = { ...req.body };
     delete user_data.password;
     user_data.hashed_password = await bcrypt.hash(req.body.password, 10);
@@ -68,16 +118,18 @@ router.post("/", validate_create, async (req, res) => {
   }
 });
 
-router.delete("/:id", async (req, res) => {
+// Action -- User -- Update
+router.put("/:id", enforce_write, async (req, res) => {
   const user = await User.find_by_id(req.params.id);
-  await user?.delete();
+  await user?.update(req.body);
   res.setHeader("HX-Redirect", "/users");
   return res.sendStatus(200);
 });
 
-router.put("/:id", async (req, res) => {
+// Action -- User -- Delete
+router.delete("/:id", enforce_write, async (req, res) => {
   const user = await User.find_by_id(req.params.id);
-  await user?.update(req.body);
+  await user?.delete();
   res.setHeader("HX-Redirect", "/users");
   return res.sendStatus(200);
 });
