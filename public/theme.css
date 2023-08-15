@@ -1,10 +1,14 @@
+/* -- Theme -- */
+
 * {
   --brand: hsl(200 100% 50%);
   --brand-hue: 200;
   --brand-saturation: 100%;
   --brand-lightness: 50%;
 
-  --brand-light: hsl(var(--brand-hue) var(--brand-saturation) var(--brand-lightness));
+  --brand-light: hsl(
+    var(--brand-hue) var(--brand-saturation) var(--brand-lightness)
+  );
   --text1-light: hsl(var(--brand-hue) var(--brand-saturation) 10%);
   --text2-light: hsl(var(--brand-hue) 30% 30%);
   --text3-light: hsl(var(--brand-hue) 20% 99%);
@@ -13,22 +17,25 @@
   --surface3-light: hsl(var(--brand-hue) 20% 92%);
   --surface4-light: hsl(var(--brand-hue) 20% 85%);
   --surface-shadow-light: var(--brand-hue) 10% 20%;
-  --shadow-strength-light: .02;
+  --shadow-strength-light: 0.02;
   --primary-light: rgb(25, 118, 210);
   --secondary-light: white;
   --error-light: #f44336;
   --theme-switcher-light: url("icons/moon-solid.svg");
 
-  --brand-dark: hsl(var(--brand-hue) calc(var(--brand-saturation) / 2) calc(var(--brand-lightness) / 1.5));
+  --brand-dark: hsl(
+    var(--brand-hue) calc(var(--brand-saturation) / 2)
+      calc(var(--brand-lightness) / 1.5)
+  );
   --text1-dark: hsl(var(--brand-hue) 15% 85%);
   --text2-dark: hsl(var(--brand-hue) 5% 65%);
   --text3-dark: hsl(var(--brand-hue) 25% 90%);
   --surface1-dark: hsl(var(--brand-hue) 10% 10%);
   --surface2-dark: hsl(var(--brand-hue) 10% 15%);
-  --surface3-dark: hsl(var(--brand-hue) 5%  20%);
+  --surface3-dark: hsl(var(--brand-hue) 5% 20%);
   --surface4-dark: hsl(var(--brand-hue) 5% 25%);
   --surface-shadow-dark: var(--brand-hue) 50% 3%;
-  --shadow-strength-dark: .2;
+  --shadow-strength-dark: 0.2;
   --primary-dark: rgb(144, 202, 249);
   --error-dark: #d32f2f;
   --secondary-dark: black;
@@ -53,30 +60,8 @@
   --theme-switcher: var(--theme-switcher-light);
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    color-scheme: dark;
-
-    --brand: var(--brand-dark);
-    --text1: var(--text1-dark);
-    --text2: var(--text2-dark);
-    --text3: var(--text3-dark);
-    --surface1: var(--surface1-dark);
-    --surface2: var(--surface2-dark);
-    --surface3: var(--surface3-dark);
-    --surface4: var(--surface4-dark);
-    --surface-shadow: var(--surface-shadow-dark);
-    --shadow-strength: var(--shadow-strength-dark);
-    --primary: var(--primary-dark);
-    --secondary: var(--secondary-dark);
-    --error: var(--error-dark);
-    --theme-switcher: var(--theme-switcher-dark);
-  }
-}
-
 [color-scheme="light"] {
   color-scheme: light;
-
   --brand: var(--brand-light);
   --text1: var(--text1-light);
   --text2: var(--text2-light);
@@ -95,7 +80,6 @@
 
 [color-scheme="dark"] {
   color-scheme: dark;
-
   --brand: var(--brand-dark);
   --text1: var(--text1-dark);
   --text2: var(--text2-dark);
@@ -118,13 +102,17 @@ html {
   box-sizing: border-box;
 }
 
-*, *:before, *:after {
+*,
+*:before,
+*:after {
   box-sizing: inherit;
 }
 
 body {
   background-color: var(--surface3);
 }
+
+/* -- Headings -- */
 
 h1 {
   font-size: 2rem;
@@ -138,7 +126,7 @@ h3 {
   font-size: 1.236rem;
 }
 
-/* SECTION -- Buttons */
+/* -- Buttons -- */
 
 button:hover {
   cursor: pointer;
@@ -148,12 +136,12 @@ button:hover {
   background-color: var(--primary);
   color: var(--surface2);
   border: none;
-  border-radius: .2rem;
-  padding: .5em 1em .5em 1em;
+  border-radius: 0.2rem;
+  padding: 0.5em 1em 0.5em 1em;
 }
 
 .btn-primary:hover {
-  opacity: .85;
+  opacity: 0.85;
 }
 
 .btn-primary:focus-visible {
@@ -165,12 +153,12 @@ button:hover {
   background-color: var(--error);
   color: var(--text3);
   border: none;
-  border-radius: .2rem;
-  padding: .5em 1em .5em 1em;
+  border-radius: 0.2rem;
+  padding: 0.5em 1em 0.5em 1em;
 }
 
 .btn-error:hover {
-  opacity: .85;
+  opacity: 0.85;
 }
 
 .btn-error:focus-visible {
@@ -182,8 +170,8 @@ button:hover {
   background-color: var(--info);
   color: var(--text1);
   border: 1px solid var(--surface3);
-  border-radius: .2rem;
-  padding: .5em 1em .5em 1em;
+  border-radius: 0.2rem;
+  padding: 0.5em 1em 0.5em 1em;
 }
 
 .btn-info:hover {
@@ -195,12 +183,12 @@ button:hover {
   outline-offset: 3px;
 }
 
-/* SECTION -- Input */
+/* -- Input Elements -- */
 
 input {
   box-sizing: border-box;
   border: 1px solid var(--text2);
-  padding: .382rem .236rem .382rem .236rem;
+  padding: 0.382rem 0.236rem 0.382rem 0.236rem;
 }
 
 input:focus-within {
@@ -208,7 +196,7 @@ input:focus-within {
   outline-offset: 2px;
 }
 
-/* SECTION -- Blocks */
+/* -- Blocks -- */
 
 /* Form */
 
@@ -221,7 +209,7 @@ input:focus-within {
 
 .form__item {
   display: flex;
-  gap: .5rem;
+  gap: 0.5rem;
   align-items: left;
   width: 100%;
   flex-direction: column;
@@ -229,17 +217,17 @@ input:focus-within {
 
 .form__actions {
   display: flex;
-  gap: .618rem;
+  gap: 0.618rem;
   justify-content: right;
 }
 
 .form__label {
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .form__error {
   color: var(--error);
-  font-size: .85rem;
+  font-size: 0.85rem;
 }
 
 .form__checkbox-item {
@@ -263,16 +251,16 @@ input:focus-within {
   font-size: 1.618rem;
   font-weight: bold;
   text-align: center;
-  margin-bottom: .618rem;
+  margin-bottom: 0.618rem;
 }
 
 .login__label {
   display: block;
-  margin-bottom: .382rem;
+  margin-bottom: 0.382rem;
 }
 
 .login__btn {
-  margin-top: .618rem;
+  margin-top: 0.618rem;
 }
 
 .login__input {
@@ -299,13 +287,29 @@ input:focus-within {
   list-style: none;
 }
 
+/* Page */
+
+.page {
+  padding: 2rem 1.236rem 2rem 1.236rem;
+  max-width: 60rem;
+  margin: auto;
+}
+
+.page__title-area {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+  align-items: center;
+}
+
 /* Table */
 
 .table {
   width: 100%;
   background-color: var(--surface2);
-  padding: .5rem;
-  border-radius: .2rem;
+  padding: 0.5rem;
+  border-radius: 0.2rem;
 }
 
 .table__header {
@@ -317,8 +321,9 @@ input:focus-within {
   font-weight: bold;
 }
 
-.table th, .table td {
-  padding: .5rem;
+.table th,
+.table td {
+  padding: 0.5rem;
 }
 
 .table tr:not(:last-child) {
@@ -328,7 +333,7 @@ input:focus-within {
 .table__actions {
   display: flex;
   justify-content: right;
-  gap: .5rem;
+  gap: 0.5rem;
   flex-wrap: wrap;
 }
 
@@ -348,10 +353,10 @@ input:focus-within {
   cursor: pointer;
 }
 
-/* SECTION -- Utility Classes */
+/* -- Utility Classes -- */
 
 .elevated {
-  box-shadow: 0 1px 2px 0 rgba(0,0,0,.1),0 2px 4px 0 rgba(0,0,0,.1);
+  box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.1), 0 2px 4px 0 rgba(0, 0, 0, 0.1);
 }
 
 .error {
@@ -368,18 +373,4 @@ input:focus-within {
 
 .relative {
   position: relative;
-}
-
-.page {
-  padding: 2rem 1.236rem 2rem 1.236rem;
-  max-width: 60rem;
-  margin: auto;
-}
-
-.page__title-area {
-  display: flex;
-  width: 100%;
-  justify-content: space-between;
-  margin-bottom: 2rem;
-  align-items: center;
 }
