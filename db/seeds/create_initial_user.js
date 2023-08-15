@@ -5,7 +5,8 @@ const bcrypt = require("bcrypt");
  * @returns { Promise<void> } 
  */
 exports.seed = async function(knex) {
-  await knex('users').del()
+  const existing_users = await knex("users").first();
+  if (existing_users) return;
   const users = await knex('users')
     .returning("id")
     .insert({
@@ -13,12 +14,14 @@ exports.seed = async function(knex) {
       username: "root", 
       hashed_password: await bcrypt.hash("root", 10)
     });
+  await knex("permissions").del();
   const permissions = await knex('permissions')
     .returning("id")
     .insert([
       { code: "read_users" },
       { code: "write_users" }
     ]);
+  await knex("user_permissions").del();
   await knex('user_permissions').insert([
     {
       user_id: users[0].id,
@@ -28,5 +31,5 @@ exports.seed = async function(knex) {
       user_id: users[0].id,
       permission_id: permissions[1].id
     }
-  ])
+  ]);
 };

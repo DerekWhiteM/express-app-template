@@ -3,10 +3,29 @@
   <head>
     <%- include('./_partials/head'); %>
   </head>
+  <style>
+    .page li {
+      margin-bottom: .618rem;
+    }
+  </style>
   <body>
     <header><%- include('./_partials/header'); %></header>
     <main class="page">
-      <h1>Welcome to Express MVC!</h1>
+      <h1>Express App Template</h1>
+      <br>
+      <br>
+      <h2>Tech Stack:</h2>
+      <br>
+      <ul>
+        <li><h3><a target="_blank" href="https://nodejs.org/">Node.js</a> -- runtime for JavaScript</h3></li>
+        <li><h3><a target="_blank" href="https://www.typescriptlang.org/">TypeScript</a> -- strongly typed JavaScript</h3></li>
+        <li><h3><a target="_blank" href="https://expressjs.com/">Express</a> -- web framework for Node.js</h3></li>
+        <li><h3><a target="_blank" href="https://www.passportjs.org/">Passport</a> -- authentication library for Node.js</h3></li>
+        <li><h3><a target="_blank" href="https://knexjs.org/">Knex.js</a> -- SQL query builder</h3></li>
+        <li><h3><a target="_blank" href="https://www.sqlite.org/index.html">SQLite</a> -- embedded relational database</h3></li>
+        <li><h3><a target="_blank" href="https://ejs.co/">EJS</a> -- JavaScript templating engine</h3></li>
+        <li><h3><a target="_blank" href="https://htmx.org/">HTMX</a> -- dynamic HTML</h3></li>
+      </ul>
     </main>
   </body>
 </html>

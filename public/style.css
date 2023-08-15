@@ -130,6 +130,14 @@ h1 {
   font-size: 2rem;
 }
 
+h2 {
+  font-size: 1.618rem;
+}
+
+h3 {
+  font-size: 1.236rem;
+}
+
 /* SECTION -- Buttons */
 
 button:hover {
@@ -318,7 +326,10 @@ input:focus-within {
 }
 
 .table__actions {
-  text-align: right;
+  display: flex;
+  justify-content: right;
+  gap: .5rem;
+  flex-wrap: wrap;
 }
 
 .table__link {

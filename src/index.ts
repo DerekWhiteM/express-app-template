@@ -1,5 +1,4 @@
 import { init_passport } from "./utils/auth";
-import compression from "compression";
 import express from "express";
 import passport from "passport";
 import router from "./routes";
@@ -12,7 +11,6 @@ app.set("view-engine", "ejs");
 
 init_passport();
 
-app.use(compression());
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(

@@ -1,7 +1,7 @@
 export const knex = require("knex")({
   client: "sqlite3",
   connection: {
-    filename: "data/data.db"
+    filename: "db/data/app.db"
   },
   pool: {
     afterCreate: (conn: any, cb: any) => conn.run('PRAGMA foreign_keys = ON', cb)
@@ -9,6 +9,6 @@ export const knex = require("knex")({
   useNullAsDefault: true,
   migrations: {
     tableName: "migrations",
-    directory: "data/migrations"
+    directory: "db/migrations"
   }
 });

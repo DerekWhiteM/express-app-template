@@ -1,0 +1,12 @@
+version: "3.8"
+services:
+  app:
+    image: express-app-template
+    ports:
+      - 3000:3000
+    restart: unless-stopped
+    env_file: .env
+    volumes: 
+      - sqlite-data:/app/db/data
+volumes:
+  sqlite-data:
