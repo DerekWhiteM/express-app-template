@@ -1,0 +1,42 @@
+<%
+  const has_fields  = typeof fields != 'undefined';
+  const username    = has_fields ? fields.username : null;
+  const email       = has_fields ? fields.email : null;
+%>
+
+<form class="form" hx-put="/users/<%= user.id %>">
+  <div class="form__item">
+    <label for="username">Username</label>
+    <input 
+      name="username" 
+      class="<%=username?.error?' error':null%>"
+      value="<%= user.username %>" 
+      maxlength="20" 
+    />
+    <div class="form__error"><%=username?.error%></div>
+  </div>
+  <div class="form__item">
+    <label for="email">Email</label>
+    <input 
+      name="email" 
+      type="email"
+      class="<%=email?.error?' error':null%>" 
+      value="<%= user.email %>" 
+      maxlength="255" 
+    />
+    <div class="form__error"><%=email?.error%></div>
+  </div>
+  <div class="form__actions">
+    <button
+      class="form__btn btn-error elevated"
+      type="submit"
+      hx-delete="/users/<%= user.id %>"
+      hx-confirm="Are you sure you wish to delete this user?"
+    >
+      Delete
+    </button>
+    <button class="form__btn btn-primary elevated" type="submit">
+      Save
+    </button>
+  </div>
+</form>

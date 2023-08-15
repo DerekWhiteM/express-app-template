@@ -1,4 +1,4 @@
-import { init_passport } from "./auth";
+import { init_passport } from "./utils/auth";
 import compression from "compression";
 import express from "express";
 import passport from "passport";

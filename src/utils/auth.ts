@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { User } from "./models";
+import { User } from "../models";
 import bcrypt from "bcrypt";
 import LocalStrategy from "passport-local";
 import passport from "passport";
@@ -10,12 +10,6 @@ export function check_authenticated(
   next: Function
 ) {
   if (req.isAuthenticated()) return next();
-  const header_api_key = req.header("x-api-key");
-  if (header_api_key) {
-    return header_api_key === process.env.API_KEY
-      ? next()
-      : res.status(403).json({ message: "Not Authenticated" });
-  }
   return res.redirect("/login");
 }
 

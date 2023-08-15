@@ -1,4 +1,4 @@
-import { knex } from "../db";
+import { knex } from "../utils/db";
 
 interface UserData {
   id: number;

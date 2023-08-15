@@ -1,4 +1,4 @@
-import { check_authenticated, check_not_authenticated } from "../../auth";
+import { check_authenticated, check_not_authenticated } from "../../utils/auth";
 import { User } from "../../models";
 import bcrypt from "bcrypt";
 import express from "express";
@@ -33,7 +33,7 @@ router.post("/login", check_not_authenticated, (req, res) => {
   passport.authenticate("local", (error: any, user: User, info: any) => {
     if (error) return res.sendStatus(500);
     if (!user) {
-      return res.render("partials/login_form.ejs", { fields: {...info} });
+      return res.render("_partials/login.ejs", { fields: {...info} });
     }
     req.logIn(user, (error) => {
       if (error) return res.sendStatus(500);
