@@ -1,4 +1,5 @@
 import { knex } from "../utils/db";
+import { random_string } from "../utils/utils";
 
 interface UserData {
   id: number;
@@ -170,5 +171,16 @@ export class User implements UserData {
       })
       .first();
     return row?.id ? true : false;
+  }
+
+  async generate_reset_token() {
+    const value = random_string(8);
+    await knex("reset_tokens")
+      .returning(["id", "token", "user_id", "expires_at"])
+      .insert({
+        token: value,
+        user_id: this.id,
+      });
+    return value;
   }
 }

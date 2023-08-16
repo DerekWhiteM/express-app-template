@@ -4,8 +4,8 @@
   const password    = has_fields ? fields.password : null;
 %>
 
-<form class="login" hx-post="/login" hx-swap="outerHTML">
-  <h1 class="login__heading">Sign in to your account</h1>
+<form class="login elevated" hx-post="/login" hx-swap="outerHTML">
+  <h1 class="login__heading">Log in to your account</h1>
   <div>
     <label for="username" class="login__label">Username</label>
     <input 
@@ -26,5 +26,6 @@
       value="<%=password?.value%>" 
     />
   </div>
-  <button class="login__btn btn-primary elevated" type="submit">Submit</button>
+  <button class="login__btn btn-primary elevated" type="submit">Log in</button>
+  <a class="login__link" href="/forgot-password">Forgot password</a>
 </form>
