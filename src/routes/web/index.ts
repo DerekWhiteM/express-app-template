@@ -1,9 +1,36 @@
 import { check_authenticated, check_not_authenticated } from "../../utils/auth";
 import { User } from "../../models";
-import bcrypt from "bcrypt";
 import express from "express";
 import passport from "passport";
 import { user_router } from "./users";
+import { z, ZodIssue } from "zod";
+import isStrongPassword from "validator/lib/isStrongPassword";
+import bcrypt from "bcrypt";
+
+async function validate_change_password(req: any, res: any, next: Function) {
+  const schema = z.object({
+    current_password: z.string(),
+    new_password: z.string().max(50).refine(val => isStrongPassword(val), {
+      message: "Weak password"
+    }),
+  });
+  const schema_validation = schema.safeParse(req.body);
+  const fields: any = {};
+  Object.keys(req.body).forEach((key) => {
+    fields[key] = {
+      value: req.body[key],
+      error: null,
+    };
+  });
+  if (schema_validation.success) {
+    return next();
+  } else {
+    schema_validation.error.issues.forEach(
+      (issue: ZodIssue) => (fields[issue.path[0]].error = issue.message)
+    );
+    return res.render("_partials/change_password.ejs", { fields: fields });
+  }
+}
 
 const router = express.Router();
 
@@ -43,7 +70,11 @@ router.post("/login", check_not_authenticated, (req, res) => {
   })(req, res);
 });
 
-router.post("/change-password", check_authenticated, async (req: any, res) => {
+// View -- Change Password
+router.get("/change-password", check_authenticated, async (req, res) => res.render("change_password.ejs"));
+
+// Action -- Change password
+router.post("/change-password", validate_change_password, async (req: any, res) => {
   try {
     const user_id = req.session.passport.user;
     const { current_password, new_password } = req.body;
@@ -55,7 +86,7 @@ router.post("/change-password", check_authenticated, async (req: any, res) => {
     const user = await User.find_by_id(user_id);
     const new_hashed_password = await bcrypt.hash(new_password, 10);
     user?.change_password(new_hashed_password);
-    res.sendStatus(200);
+    res.send("Success!");
   } catch (error) {
     console.log(error);
     res.sendStatus(500);

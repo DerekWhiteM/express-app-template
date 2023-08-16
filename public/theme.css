@@ -167,7 +167,7 @@ button:hover {
 }
 
 .btn-info {
-  background-color: var(--info);
+  background-color: var(--secondary);
   color: var(--text1);
   border: 1px solid var(--surface3);
   border-radius: 0.2rem;

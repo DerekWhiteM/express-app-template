@@ -2,6 +2,7 @@ import express from "express";
 import { User } from "../../models";
 import bcrypt from "bcrypt";
 import { ZodIssue, z } from "zod";
+import isStrongPassword from "validator/lib/isStrongPassword";
 
 
 // **Permission handling**
@@ -25,7 +26,9 @@ async function validate_create(req: any, res: any, next: Function) {
   const schema = z.object({
     username: z.string().max(20),
     email: z.string().email(),
-    password: z.string().max(50),
+    password: z.string().max(50).refine(val => isStrongPassword(val), {
+      message: "Weak password"
+    }),
   });
   const schema_validation = schema.safeParse(req.body);
   const fields: any = {};
@@ -90,16 +93,16 @@ async function validate_update(req: any, res: any, next: Function) {
 
 const router = express.Router();
 
-// View -- All Users
+// View -- All
 router.get("/", enforce_read, async (req, res) => {
   const users = await User.find_all();
   return res.render("users/archive.ejs", { users: users });
 });
 
-// View -- Create User
+// View -- Create
 router.get("/create", enforce_read, async (req, res) => res.render("users/create.ejs"));
 
-// View -- Edit User
+// View -- Edit
 router.get("/:id", enforce_read, async (req, res) => {
   const user = await User.find_by_id(req.params.id);
   return res.render("users/edit.ejs", { user: user });
@@ -117,7 +120,7 @@ router.get("/:id/permissions", enforce_read, async (req, res) => {
   });
 });
 
-// Action -- User Permissions -- Update
+// Action -- Update User Permissions
 router.put("/:id/permissions", enforce_write, async (req, res) => {
   const user = await User.find_by_id(req.params.id);
   const permissions = await User.get_permissions();
@@ -136,7 +139,7 @@ router.put("/:id/permissions", enforce_write, async (req, res) => {
   return res.sendStatus(200);
 });
 
-// Action -- User -- Create
+// Action -- Create
 router.post("/", enforce_write, validate_create, async (req, res) => {
   try {
     const user_data = { ...req.body };
@@ -151,7 +154,7 @@ router.post("/", enforce_write, validate_create, async (req, res) => {
   }
 });
 
-// Action -- User -- Update
+// Action -- Update
 router.put("/:id", enforce_write, validate_update, async (req, res) => {
   const user = await User.find_by_id(req.params.id);
   await user?.update(req.body);
@@ -159,7 +162,7 @@ router.put("/:id", enforce_write, validate_update, async (req, res) => {
   return res.sendStatus(200);
 });
 
-// Action -- User -- Delete
+// Action -- Delete
 router.delete("/:id", enforce_write, async (req, res) => {
   const user = await User.find_by_id(req.params.id);
   await user?.delete();
