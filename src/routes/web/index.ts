@@ -1,11 +1,11 @@
 import { check_authenticated, check_not_authenticated } from "../../utils/auth";
 import { User } from "../../models";
-import express from "express";
-import passport from "passport";
 import { user_router } from "./users";
 import { z, ZodIssue } from "zod";
-import isStrongPassword from "validator/lib/isStrongPassword";
 import bcrypt from "bcrypt";
+import express from "express";
+import isStrongPassword from "validator/lib/isStrongPassword";
+import passport from "passport";
 
 async function validate_change_password(req: any, res: any, next: Function) {
   const schema = z.object({
