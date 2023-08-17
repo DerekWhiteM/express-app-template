@@ -44,14 +44,14 @@ async function validate_create(req: any, res: any, next: Function) {
     if (username_exists || email_exists) {
       if (username_exists) fields.username.error = "Username is taken";
       if (email_exists) fields.email.error = "Email is already in use";
-      return res.render("_partials/create_user.ejs", { fields: fields });
+      return res.render("_partials/create-user.ejs", { fields: fields });
     }
     return next();
   } else {
     schema_validation.error.issues.forEach(
       (issue: ZodIssue) => (fields[issue.path[0]].error = issue.message)
     );
-    return res.render("_partials/create_user.ejs", { fields: fields });
+    return res.render("_partials/create-user.ejs", { fields: fields });
   }
 }
 
@@ -74,7 +74,7 @@ async function validate_update(req: any, res: any, next: Function) {
     if ((user_by_username && req.body.username !== user_by_username.username) || (user_by_email && req.body.email !== user_by_email.email)) {
       if (user_by_username ) fields.username.error = "Username is taken";
       if (user_by_email) fields.email.error = "Email is already in use";
-      return res.render("_partials/edit_user.ejs", {
+      return res.render("_partials/edit-user.ejs", {
         user: user_by_username ? user_by_username : user_by_email, 
         fields: fields 
       });
@@ -84,7 +84,7 @@ async function validate_update(req: any, res: any, next: Function) {
     schema_validation.error.issues.forEach(
       (issue: ZodIssue) => (fields[issue.path[0]].error = issue.message)
     );
-    return res.render("_partials/edit_user.ejs", { fields: fields });
+    return res.render("_partials/edit-user.ejs", { fields: fields });
   }
 }
 

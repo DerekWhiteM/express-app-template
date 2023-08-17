@@ -1,5 +1,3 @@
-/*
-
 const switcher = document.getElementById("theme-switcher");
 const doc = document.documentElement;
 
@@ -20,5 +18,3 @@ if (switcher) {
     current_theme === "light" ? setTheme("dark") : setTheme("light");
   };
 }
-
-*/

@@ -102,6 +102,24 @@ export class User implements UserData {
     return rows;
   }
 
+  static async find_reset_token(
+    code: string
+  ): Promise<{ id: number; token: string; user_id: number }> {
+    const row = await knex("reset_tokens")
+      .returning(["id", "token", "user_id"])
+      .where({ token: code })
+      .andWhere("expires_at", ">", knex.fn.now())
+      .first();
+    return row;
+  }
+
+  static async delete_reset_token(id: number) {
+    const num_deleted = await knex("reset_tokens")
+      .where({ id: id })
+      .del();
+    return num_deleted;
+  }
+
   async get_permissions(): Promise<
     { id: number; permission_id: number; code: string }[]
   > {
@@ -151,7 +169,7 @@ export class User implements UserData {
     return num_deleted;
   }
 
-  async change_password(hashed_password: string) {
+  async change-password(hashed_password: string) {
     await knex(User.table)
       .returning(User.columns)
       .where({ id: this.id })
