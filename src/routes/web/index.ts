@@ -8,10 +8,9 @@ import express from "express";
 import isStrongPassword from "validator/lib/isStrongPassword";
 import passport from "passport";
 
-
 // **Input validation**
 
-async function validate_change-password(req: any, res: any, next: Function) {
+async function validate_change_password(req: any, res: any, next: Function) {
   const schema = z.object({
     password: z
       .string()
@@ -56,9 +55,11 @@ async function validate_reset_password(req: any, res: any, next: Function) {
   schema_validation.error.issues.forEach(
     (issue: ZodIssue) => (fields[issue.path[0]].error = issue.message)
   );
-  return res.render("_partials/reset-password.ejs", { fields: fields, token: req.params.token });
+  return res.render("_partials/reset-password.ejs", {
+    fields: fields,
+    token: req.params.token,
+  });
 }
-
 
 // **Routes**
 
@@ -89,50 +90,44 @@ router.get("/change-password", check_authenticated, async (req, res) =>
 router.get(
   "/reset-password/:token",
   check_not_authenticated,
-  async (req, res) => {
-    res.render("reset-password.ejs", { token: req.params.token });
-  }
+  async (req, res) =>
+    res.render("reset-password.ejs", { token: req.params.token })
 );
 
 // Action -- Login
 router.post("/login", check_not_authenticated, (req, res) => {
   passport.authenticate("local", (error: any, user: User, info: any) => {
     if (error) return res.sendStatus(500);
-    if (!user) {
+    if (!user)
       return res.render("_partials/login.ejs", { fields: { ...info } });
-    }
-    req.logIn(user, (error) => {
-      if (error) return res.sendStatus(500);
-      res.setHeader("HX-Redirect", "/");
-      res.sendStatus(200);
-    });
+    else
+      return req.logIn(user, (error) => {
+        if (error) return res.sendStatus(500);
+        res.setHeader("HX-Redirect", "/");
+        res.sendStatus(200);
+      });
   })(req, res);
 });
 
 // Action -- Logout
 router.delete("/logout", check_authenticated, (req: any, res) => {
-  try {
-    req.logOut(() => {
-      req.session.destroy();
-      res.setHeader("HX-Redirect", "/login");
-      res.sendStatus(200);
-    });
-  } catch (error) {
-    console.log(error);
-    res.sendStatus(500);
-  }
+  return req.logOut(() => {
+    req.session.destroy();
+    res.setHeader("HX-Redirect", "/login");
+    res.sendStatus(200);
+  });
 });
 
 // Action -- Change Password
 router.post(
   "/change-password",
-  validate_change-password,
+  validate_change_password,
   async (req: any, res) => {
     const user_id = req.session.passport.user;
     const { password } = req.body;
     const user = await User.find_by_id(user_id);
     const new_hashed_password = await bcrypt.hash(password, 10);
-    await user?.change-password(new_hashed_password);
+    await user?.change_password(new_hashed_password);
     res.send("Success!");
   }
 );
@@ -144,10 +139,10 @@ router.post("/forgot-password", async (req: any, res) => {
     const by_email = await User.find_by_email(req.body.username);
     if (by_username) return by_username;
     else if (by_email) return by_email;
-    else return null;
+    return null;
   })();
   if (!user) {
-    return res.render("_partials/forgot-password", {
+    return res.render("_partials/forgot-password.ejs", {
       fields: {
         username: {
           value: req.body.username,
@@ -163,14 +158,18 @@ router.post("/forgot-password", async (req: any, res) => {
 });
 
 // Action -- Reset Password
-router.post("/reset-password/:token", validate_reset_password, async (req, res) => {
-  const token = await User.find_reset_token(req.params.token);
-  if (!token) return res.send("Invalid reset token");
-  const hashed_password = await bcrypt.hash(req.body.password, 10);
-  const user = await User.find_by_id(token.user_id);
-  await user?.change-password(hashed_password);
-  await User.delete_reset_token(token.id);
-  return res.send("Password reset successful");
-});
+router.post(
+  "/reset-password/:token",
+  validate_reset_password,
+  async (req, res) => {
+    const token = await User.find_reset_token(req.params.token);
+    if (!token) return res.send("Invalid reset token");
+    const hashed_password = await bcrypt.hash(req.body.password, 10);
+    const user = await User.find_by_id(token.user_id);
+    await user?.change_password(hashed_password);
+    await User.delete_reset_token(token.id);
+    return res.send("Password reset successful");
+  }
+);
 
 export const web_router = router;

@@ -165,8 +165,8 @@ button:hover {
 }
 
 .btn-primary:focus-visible {
-  outline: 2px solid var(--primary);
-  outline-offset: 3px;
+  outline: 1px solid var(--primary);
+  outline-offset: 2px;
 }
 
 .btn-error {
@@ -387,6 +387,11 @@ input:focus-within {
 
 .error {
   border: 1px solid var(--error);
+}
+
+.error:focus-within {
+  outline: 1px solid var(--error);
+  outline-offset: 2px;
 }
 
 .h-full {

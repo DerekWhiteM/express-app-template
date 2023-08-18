@@ -169,7 +169,7 @@ export class User implements UserData {
     return num_deleted;
   }
 
-  async change-password(hashed_password: string) {
+  async change_password(hashed_password: string) {
     await knex(User.table)
       .returning(User.columns)
       .where({ id: this.id })

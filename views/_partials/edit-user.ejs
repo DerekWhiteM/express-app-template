@@ -1,7 +1,7 @@
 <%
-  const has_fields  = typeof fields != 'undefined';
-  const username    = has_fields ? fields.username : null;
-  const email       = has_fields ? fields.email : null;
+  const has_fields = typeof fields != 'undefined';
+  const username = has_fields ? fields.username : null;
+  const email = has_fields ? fields.email : null;
 %>
 
 <form class="form" hx-put="/users/<%= user.id %>">

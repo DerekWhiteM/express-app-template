@@ -1,8 +1,8 @@
 <%
-  const has_fields  = typeof fields != 'undefined';
-  const username    = has_fields ? fields.username : null;
-  const email       = has_fields ? fields.email : null;
-  const password    = has_fields ? fields.password : null;
+  const has_fields = typeof fields != 'undefined';
+  const username = has_fields ? fields.username : null;
+  const email = has_fields ? fields.email : null;
+  const password = has_fields ? fields.password : null;
 %>
 
 <form class="form" hx-post="/users" hx-swap="outerHTML">

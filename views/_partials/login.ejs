@@ -1,7 +1,7 @@
 <%
-  const has_fields  = typeof fields != 'undefined';
-  const username    = has_fields ? fields.username : null;
-  const password    = has_fields ? fields.password : null;
+  const has_fields = typeof fields != 'undefined';
+  const username = has_fields ? fields.username : null;
+  const password = has_fields ? fields.password : null;
 %>
 
 <form class="login elevated" hx-post="/login" hx-swap="outerHTML">
